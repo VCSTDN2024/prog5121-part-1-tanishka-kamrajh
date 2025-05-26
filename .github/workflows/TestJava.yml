@@ -1,5 +1,3 @@
-# This is a basic workflow that is manually triggered
-
 name: TestJava
 
 on:
@@ -14,59 +12,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: List root directory contents
-        run: ls
-
-      - name: Compile classes and tests
-        working-directory: ./src
+      - name: Debug - list directory structure
         run: |
-          javac -cp "../testresources/junit-platform-console-standalone-1.6.0.jar" \
-          ./com.mycompany.st10473692_formative1_part2/User.java \
-          ./com.mycompany.st10473692_formative1_part2/Message.java \
-          ./com.mycompany.st10473692_formative1_part2/Main.java \
-          ./com.mycompany.st10473692_formative1_part2/Login.java \
-          ../test/com.mycompany.st10473692_formative1_part2/UserTest.java \
-          ../test/com.mycompany.st10473692_formative1_part2/MessageTest.java \
-          ../test/com.mycompany.st10473692_formative1_part2/LoginTest.java
+          echo "==== src ===="
+          find src
+          echo "==== test ===="
+          find test
 
-      - name: List contents of src package after compile
-        working-directory: ./src/com.mycompany.st10473692_formative1_part2
-        run: ls
-
-      - name: Copy compiled classes to test directory
-        working-directory: ./src/com.mycompany.st10473692_formative1_part2
-        run: cp User.class Message.class Main.class Login.class ../../test/com.mycompany.st10473692_formative1_part2
-
-      - name: Copy compiled Test classes to testresources directory
-        working-directory: ./test/com.mycompany.st10473692_formative1_part2
-        run: cp *.class ../../testresources/
-
-      - name: List contents of test package
-        working-directory: ./test/com.mycompany.st10473692_formative1_part2
-        run: ls
-
-      - name: Run UserTest and generate report
-        working-directory: ./test
+      - name: Compile Java source and test files
         run: |
-          ls
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp . \
+          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
+            src/com.mycompany.st10473692_formative1_part2/User.java \
+            src/com.mycompany.st10473692_formative1_part2/Message.java \
+            src/com.mycompany.st10473692_formative1_part2/Main.java \
+            src/com.mycompany.st10473692_formative1_part2/Login.java \
+            test/com.mycompany.st10473692_formative1_part2/UserTest.java \
+            test/com.mycompany.st10473692_formative1_part2/MessageTest.java \
+            test/com.mycompany.st10473692_formative1_part2/LoginTest.java
+
+      - name: Copy compiled .class files to testresources
+        run: |
+          mkdir -p testresources/classes
+          find src -name "*.class" -exec cp {} testresources/classes \;
+          find test -name "*.class" -exec cp {} testresources/classes \;
+
+      - name: Run UserTest
+        run: |
+          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
+            -cp testresources/classes \
             --select-class com.mycompany.st10473692_formative1_part2.UserTest
 
-      - name: Run MessageTest and generate report
-        working-directory: ./test
+      - name: Run MessageTest
         run: |
-          ls
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp . \
+          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
+            -cp testresources/classes \
             --select-class com.mycompany.st10473692_formative1_part2.MessageTest
 
-      - name: Run LoginTest and generate report
-        working-directory: ./test
+      - name: Run LoginTest
         run: |
-          ls
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp . \
+          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
+            -cp testresources/classes \
             --select-class com.mycompany.st10473692_formative1_part2.LoginTest
