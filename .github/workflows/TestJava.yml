@@ -18,8 +18,8 @@ jobs:
       - name: Compile Java classes and tests
         run: |
           javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
-            src/com/mycompany/st10473692_formative1_part2/*.java \
-            test/com/mycompany/st10473692_formative1_part2/*.java
+            src/com/mycompany/st10473692_formative1_part2/* \
+            test/com/mycompany/st10473692_formative1_part2/*
 
       - name: List compiled files in src
         run: ls src/com/mycompany/st10473692_formative1_part2
