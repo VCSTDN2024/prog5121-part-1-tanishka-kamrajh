@@ -12,38 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Debug - list directory structure
+      - name: List project structure
         run: |
-          echo "==== src/main/java ===="
-          find src/main/java
-          echo "==== src/test/java ===="
-          find src/test/java
+          echo "=== Source Structure ==="
+          find src || true
+          echo "=== testresources Structure ==="
+          find testresources || true
 
-      - name: Compile Java source and test files
+      - name: Compile source and test classes
         run: |
-          mkdir -p testresources/classes
-          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
-            -d testresources/classes \
+          mkdir -p build/classes
+          javac -cp testresources/junit-platform-console-standalone-1.6.0.jar \
+            -d build/classes \
             src/main/java/com/mycompany/st10473692_formative1_part2/*.java \
             src/test/java/com/mycompany/st10473692_formative1_part2/*.java
 
-      - name: Run UserTest
+      - name: Run all unit tests
         run: |
           java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp testresources/classes \
-            --select-class com.mycompany.st10473692_formative1_part2.UserTest
-
-      - name: Run MessageTest
-        run: |
-          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp testresources/classes \
-            --select-class com.mycompany.st10473692_formative1_part2.MessageTest
-
-      - name: Run LoginTest
-        run: |
-          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp testresources/classes \
-            --select-class com.mycompany.st10473692_formative1_part2.LoginTest
+            -cp build/classes \
+            --scan-classpath
