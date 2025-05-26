@@ -1,33 +1,77 @@
 name: TestJava
 
+# Controls when the workflow will run
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+ # Triggers the workflow on push or pull request events but only for the master branch
+ push:
+   branches: [ main ]
+ pull_request: 
+   branches: [ main ]
 
+# Allows you to run this workflow manually from the Actions tab
+workflow_dispatch:
+
+# A workflow run is made up of one on more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
 
-      - name: Compile Java classes and tests
-        run: |
-          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
-            src/com/mycompany/st10473692_formative1_part2/* \
-            test/com/mycompany/st10473692_formative1_part2/*
+      # list contents or directory
+      - name: List contents
+        run: ls
 
-      - name: List compiled files in src
-        run: ls src/com/mycompany/st10473692_formative1_part2
+    # Compiles classes to test
+      - name: Compile classes and tests
+        working-directory: ./src
+        run: javac -cp"../testresources/junit-platform-console-standalone-1.6.0,jar" ./com.mycompany.st10473692_formative1_part2/User.java ./com.mycompany.st10473692_formative1_part2/Message.java ./com.mycompany.st10473692_formative1_part2/Main.java ./com.mycompany.st10473692_formative1_part2/Login.java "../test/com.mycompany.st10473692_formative1_part2/UserTest.java" "../test/com.mycompany.st10473692_formative1_part2/MessageTest.java" "../test/com.mycompany.st10473692_formative1_part2/LoginTest.java"
 
-      - name: List compiled files in test
-        run: ls test/com/mycompany/st10473692_formative1_part2
+    # list contents of src to verify that classess compiled
+      - name: List contents of sec directory after compile 
+        working-directory: ./src/com.mycompany.st10473692_formative1_part2
+        run: ls
 
-      - name: Run all tests
-        run: |
-          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp "src:test" --scan-class-path
+    # copy compiled classes to test directory
+      - name: List contents of src package after compile
+        working-directory: ./src/com.mycompany.st10473692_formative1_part2
+        run: ls
+
+    #copy compiled tests
+      - name: Copy compiled classes to test directory
+        working-directory: ./src/com.mycompany.st10473692_formative1_part2
+        run:cp: User.class Message.class Main.class Login.class ../../test/com.mycompany.st10473692_formative1_part2
+
+    # list contents or directory
+      - name: List contents test package
+        working-directory: ./test/com.mycompany.st10473692_formative1_part2
+        run: ls
+
+    #run User Class tests and output report
+    - name: run Login Class tests and create report 
+     working-directory: /test 
+    run: |
+     ls
+     java -jar "../testresources/junit-platform-console-standalone-1.6.0.jar" -cp"." --select-class com.mycompany.st10473692_formative1_part2.UserTest.java
+
+    #run Message Class tests and output report
+    - name: run Task Class tests and create report 
+    working-directory: /test 
+    run: |
+     ls
+     java-jar"../testresources/junit-platform-console-standalone-1.6.0.jar" -cp"." --select-class com.mycompany.st10473692_formative1_part2.MessageTest.java
+
+
+    #run Login Class tests and output report
+    name: run Search Class tests and create report 
+    working-directory: ./test
+    run: |
+     ls
+     java-jar "../testresources/junit-platform-console-standalone-1.6.0.jar" -cp "." --select-class com.mycompany.st10473692_formative1_part2.LoginTest.java
+
+
