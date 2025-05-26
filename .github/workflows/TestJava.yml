@@ -12,26 +12,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: List project structure
+      - name: Show project directory structure
         run: |
-          echo "=== Source Structure ==="
-          find src || true
-          echo "=== testresources Structure ==="
-          find testresources || true
+          echo "==== Project structure ===="
+          find src
+          echo "==== Done ===="
 
-      - name: Compile source and test classes
+      - name: Compile Java source and test classes
         run: |
-          mkdir -p build/classes
+          mkdir -p testresources/classes
           javac -cp testresources/junit-platform-console-standalone-1.6.0.jar \
-            -d build/classes \
+            -d testresources/classes \
             src/main/java/com/mycompany/st10473692_formative1_part2/*.java \
             src/test/java/com/mycompany/st10473692_formative1_part2/*.java
 
-      - name: Run all unit tests
+      - name: Run all tests with JUnit Console Launcher
         run: |
           java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
-            -cp build/classes \
+            -cp testresources/classes \
             --scan-classpath
