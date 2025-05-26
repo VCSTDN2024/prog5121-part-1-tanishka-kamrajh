@@ -39,11 +39,10 @@ jobs:
         working-directory: ./src/com.mycompany.st10473692_formative1_part2
         run: ls
 
-
     # copy compiled classes to test directory
     ﻿﻿name: copy compiled classes to testresources directory 
     working directory: •/src/com.mycompany.st10473692_formative1_part2
-       run: cp-t "../../test/com.mycompany.st10473692_formative1_part2" User.class Message.class Main.class Login.class
+    run: cp -t "../../test/com.mycompany.st10473692_formative1_part2" User.class Message.class Main.class Login.class
 
     #copy compiled tests
 ﻿﻿    name: copy compiled Test classes to testresources directory 
