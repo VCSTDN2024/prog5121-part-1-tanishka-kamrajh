@@ -17,27 +17,18 @@ jobs:
 
       - name: Debug - list directory structure
         run: |
-          echo "==== src ===="
-          find src
-          echo "==== test ===="
-          find test
+          echo "==== src/main/java ===="
+          find src/main/java
+          echo "==== src/test/java ===="
+          find src/test/java
 
       - name: Compile Java source and test files
         run: |
-          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
-            src/com.mycompany.st10473692_formative1_part2/User.java \
-            src/com.mycompany.st10473692_formative1_part2/Message.java \
-            src/com.mycompany.st10473692_formative1_part2/Main.java \
-            src/com.mycompany.st10473692_formative1_part2/Login.java \
-            test/com.mycompany.st10473692_formative1_part2/UserTest.java \
-            test/com.mycompany.st10473692_formative1_part2/MessageTest.java \
-            test/com.mycompany.st10473692_formative1_part2/LoginTest.java
-
-      - name: Copy compiled .class files to testresources
-        run: |
           mkdir -p testresources/classes
-          find src -name "*.class" -exec cp {} testresources/classes \;
-          find test -name "*.class" -exec cp {} testresources/classes \;
+          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
+            -d testresources/classes \
+            src/main/java/com/mycompany/st10473692_formative1_part2/*.java \
+            src/test/java/com/mycompany/st10473692_formative1_part2/*.java
 
       - name: Run UserTest
         run: |
