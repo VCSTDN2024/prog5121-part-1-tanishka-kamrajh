@@ -62,7 +62,7 @@ jobs:
     #run Message Class tests and output report
     name: run Task Class tests and create report 
     working-directory: /test 
-    run:|
+    run: |;
      ls
      java-jar"../testresources/junit-platform-console-standalone-1.6.0.jar" -cp"." --select-class com.mycompany.st10473692_formative1_part2.MessageTest
 
