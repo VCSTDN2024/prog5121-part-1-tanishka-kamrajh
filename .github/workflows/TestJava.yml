@@ -12,62 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository code
       - uses: actions/checkout@v2
 
-      # Configure git safe directory to avoid git warnings
-      - name: Configure git safe directory
-        run: git config --global --add safe.directory /home/runner/work/prog5121-part-2-tanishka-kamrajh-1/prog5121-part-2-tanishka-kamrajh-1
-
-      # List root directory contents
-      - name: List root contents
-        run: ls -la
-
-      # Compile Java classes and tests
-      - name: Compile classes and tests
-        working-directory: ./src
+      - name: Compile Java classes and tests
         run: |
-          javac -cp ".:../testresources/junit-platform-console-standalone-1.6.0.jar" \
-            ./com.mycompany.st10473692_formative1_part2/User.java \
-            ./com.mycompany.st10473692_formative1_part2/Message.java \
-            ./com.mycompany.st10473692_formative1_part2/Main.java \
-            ./com.mycompany.st10473692_formative1_part2/Login.java \
-            ../test/com.mycompany.st10473692_formative1_part2/UserTest.java \
-            ../test/com.mycompany.st10473692_formative1_part2/MessageTest.java \
-            ../test/com.mycompany.st10473692_formative1_part2/LoginTest.java
+          javac -cp "testresources/junit-platform-console-standalone-1.6.0.jar" \
+            src/com/mycompany/st10473692_formative1_part2/*.java \
+            test/com/mycompany/st10473692_formative1_part2/*.java
 
-      # List compiled classes in source package
-      - name: List compiled classes
-        working-directory: ./src/com.mycompany.st10473692_formative1_part2
-        run: ls -la
-
-      # Copy compiled classes to test directory for running tests
-      - name: Copy compiled classes to test directory
-        working-directory: ./src/com.mycompany.st10473692_formative1_part2
-        run: cp *.class ../../test/com.mycompany.st10473692_formative1_part2/
-
-      # List test directory contents to verify copied classes
-      - name: List test directory contents
-        working-directory: ./test/com.mycompany.st10473692_formative1_part2
-        run: ls -la
-
-      # Run UserTest with JUnit platform console
-      - name: Run UserTest and create report
-        working-directory: ./test
+      - name: Run all tests
         run: |
-          ls -la
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar -cp . --select-class com.mycompany.st10473692_formative1_part2.UserTest
-
-      # Run MessageTest with JUnit platform console
-      - name: Run MessageTest and create report
-        working-directory: ./test
-        run: |
-          ls -la
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar -cp . --select-class com.mycompany.st10473692_formative1_part2.MessageTest
-
-      # Run LoginTest with JUnit platform console
-      - name: Run LoginTest and create report
-        working-directory: ./test
-        run: |
-          ls -la
-          java -jar ../testresources/junit-platform-console-standalone-1.6.0.jar -cp . --select-class com.mycompany.st10473692_formative1_part2.LoginTest
+          java -jar testresources/junit-platform-console-standalone-1.6.0.jar \
+            -cp src:test -scan-class-path
