@@ -11,7 +11,7 @@ on:
    branches: [ main ]
 
 # Allows you to run this workflow manually from the Actions tab
-workflow dispatch:
+workflow_dispatch:
 
 # A workflow run is made up of one on more jobs that can run sequentially or in parallel
 jobs:
@@ -30,7 +30,7 @@ jobs:
         run: ls
 
     # Compiles classes to test
-      - name: compile classes 
+      - name: Compile classes and tests
         working-directory: ./src
         run: javac -cp"../testresources/junit-platform-console-standalone-1.6.0,jar" ./com.mycompany.st10473692_formative1_part2/User.java ./com.mycompany.st10473692_formative1_part2/Message.java ./com.mycompany.st10473692_formative1_part2/Main.java ./com.mycompany.st10473692_formative1_part2/Login.java "../test/com.mycompany.st10473692_formative1_part2/UserTest.java" "../test/com.mycompany.st10473692_formative1_part2/MessageTest.java" "../test/com.mycompany.st10473692_formative1_part2/LoginTest.java"
 
@@ -40,19 +40,19 @@ jobs:
         run: ls
 
     # copy compiled classes to test directory
-    ﻿name: copy compiled classes to testresources directory 
-    working-directory: •/src/com.mycompany.st10473692_formative1_part2
-    run: cp -t "../../test/com.mycompany.st10473692_formative1_part2" User.class Message.class Main.class Login.class
+      - name: List contents of src package after compile
+        working-directory: ./src/com.mycompany.st10473692_formative1_part2
+        run: ls
 
     #copy compiled tests
-﻿﻿    name: copy compiled Test classes to testresources directory 
-    working-directory: •/test/com.mycompany.st10473692_formative1_part2
-    run: cp-t "../../testresources/" User.class Message.class Main.class Login.class
+﻿﻿      - name: Copy compiled classes to test directory
+        working-directory:./src/com.mycompany.st10473692_formative1_part2
+        run:cp User.class Message.class Main.class Login.class ../../test/com.mycompany.st10473692_formative1_part2
 
     # list contents or directory
-    - name: List contents test package 
-    working-directory: •/test/com.mycompany.st10473692_formative1_part2
-    run: ls
+      - name: List contents test package 
+        working-directory: ./test/com.mycompany.st10473692_formative1_part2
+        run: ls
 
     #run User Class tests and output report
     - name: run Login Class tests and create report 
